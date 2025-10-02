@@ -26,6 +26,7 @@ class RegistrosController {
         error_log("PHP Config - upload_max_filesize: " . $max_file_size);
         error_log("PHP Config - post_max_size: " . $max_post_size);
         error_log("File size: " . ($_FILES['cv']['size'] ?? 'N/A'));
+        error_log("Content-Length: " . ($_SERVER['CONTENT_LENGTH'] ?? 'N/A'));
         
         $name = trim($_POST['name'] ?? '');
         $email = trim($_POST['email'] ?? '');
@@ -56,9 +57,19 @@ class RegistrosController {
             exit;
         }
         
+        // Verificar Content-Length del POST
+        $content_length = intval($_SERVER['CONTENT_LENGTH'] ?? 0);
+        $max_post_bytes = 20 * 1024 * 1024; // 20MB en bytes
+        
+        if ($content_length > $max_post_bytes) {
+            $error_msg = "El archivo es demasiado grande. Tamaño: " . round($content_length / 1024 / 1024, 2) . "MB, Límite: 20MB";
+            header('Location: ../index.php?err=' . urlencode($error_msg));
+            exit;
+        }
+        
         // Verificar tamaño del archivo
-        if ($file['size'] > 10 * 1024 * 1024) { // 10MB
-            header('Location: ../index.php?err=' . urlencode('El archivo es demasiado grande (máximo 10MB)'));
+        if ($file['size'] > 20 * 1024 * 1024) { // 20MB
+            header('Location: ../index.php?err=' . urlencode('El archivo es demasiado grande (máximo 20MB)'));
             exit;
         }
 

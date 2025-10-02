@@ -17,8 +17,16 @@ RewriteRule ^(.*)$ index.php [QSA,L]
     Allow from all
 </FilesMatch>
 
-# Configuración de PHP
+# Configuración de PHP para Railway
 php_value upload_max_filesize 20M
 php_value post_max_size 20M
 php_value max_execution_time 300
 php_value memory_limit 256M
+php_value max_input_time 300
+php_value max_file_uploads 20
+php_value file_uploads On
+
+# Configuración adicional para archivos grandes
+php_value max_input_vars 3000
+php_value suhosin.post.max_vars 3000
+php_value suhosin.request.max_vars 3000
