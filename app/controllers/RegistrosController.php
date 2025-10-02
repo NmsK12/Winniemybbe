@@ -17,6 +17,11 @@ class RegistrosController {
             header('Location: ../index.php');
             exit;
         }
+        
+        // Verificar límites de PHP
+        $max_file_size = ini_get('upload_max_filesize');
+        $max_post_size = ini_get('post_max_size');
+        
         $name = trim($_POST['name'] ?? '');
         $email = trim($_POST['email'] ?? '');
         $phone = trim($_POST['phone'] ?? '');
@@ -28,8 +33,27 @@ class RegistrosController {
         }
 
         $file = $_FILES['cv'];
+        
+        // Manejo detallado de errores de subida
+        $error_messages = [
+            UPLOAD_ERR_INI_SIZE => 'El archivo excede el límite de upload_max_filesize (' . $max_file_size . ')',
+            UPLOAD_ERR_FORM_SIZE => 'El archivo excede el límite MAX_FILE_SIZE del formulario',
+            UPLOAD_ERR_PARTIAL => 'El archivo se subió parcialmente',
+            UPLOAD_ERR_NO_FILE => 'No se seleccionó ningún archivo',
+            UPLOAD_ERR_NO_TMP_DIR => 'Falta directorio temporal',
+            UPLOAD_ERR_CANT_WRITE => 'No se pudo escribir el archivo al disco',
+            UPLOAD_ERR_EXTENSION => 'Una extensión de PHP detuvo la subida del archivo'
+        ];
+        
         if ($file['error'] !== UPLOAD_ERR_OK) {
-            header('Location: ../index.php?err=' . urlencode('Error subiendo archivo'));
+            $error_msg = $error_messages[$file['error']] ?? 'Error desconocido al subir archivo';
+            header('Location: ../index.php?err=' . urlencode($error_msg));
+            exit;
+        }
+        
+        // Verificar tamaño del archivo
+        if ($file['size'] > 10 * 1024 * 1024) { // 10MB
+            header('Location: ../index.php?err=' . urlencode('El archivo es demasiado grande (máximo 10MB)'));
             exit;
         }
 

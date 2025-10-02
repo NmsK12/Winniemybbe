@@ -37,6 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="alert alert-danger"><?= htmlspecialchars($_GET['err']) ?></div>
           <?php endif; ?>
           <form id="apply-form" method="post" enctype="multipart/form-data" novalidate>
+            <input type="hidden" name="MAX_FILE_SIZE" value="20971520">
             <div class="mb-3">
               <label class="form-label">Nombre completo</label>
               <input type="text" name="name" class="form-control" required>
@@ -63,8 +64,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               </select>
             </div>
             <div class="mb-3">
-              <label class="form-label">CV (pdf, docx, zip, etc.)</label>
-              <input type="file" name="cv" class="form-control" required>
+              <label class="form-label">CV (pdf, docx, zip, etc.) - Máximo 20MB</label>
+              <input type="file" name="cv" class="form-control" required accept=".pdf,.doc,.docx,.zip,.rar">
             </div>
             <div class="d-flex justify-content-end">
               <button class="btn btn-primary" type="submit">Enviar postulación</button>
