@@ -22,6 +22,11 @@ class RegistrosController {
         $max_file_size = ini_get('upload_max_filesize');
         $max_post_size = ini_get('post_max_size');
         
+        // Log para debugging
+        error_log("PHP Config - upload_max_filesize: " . $max_file_size);
+        error_log("PHP Config - post_max_size: " . $max_post_size);
+        error_log("File size: " . ($_FILES['cv']['size'] ?? 'N/A'));
+        
         $name = trim($_POST['name'] ?? '');
         $email = trim($_POST['email'] ?? '');
         $phone = trim($_POST['phone'] ?? '');

@@ -8,4 +8,4 @@ cmds = ["composer install --no-dev --optimize-autoloader"]
 cmds = ["echo 'Build phase completed'"]
 
 [start]
-cmd = "php -d upload_max_filesize=20M -d post_max_size=20M -d max_execution_time=300 -d memory_limit=256M -S 0.0.0.0:$PORT -t ."
+cmd = "./start.sh"
